@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import { ToastContainer } from "react-toastify";
+import AllUsers from "./Pages/AllUsers";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="user/register" element={<Register />} />
           <Route path="user/login" element={<Login />} />
+          <Route path="users" element={<AllUsers />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -50,6 +50,24 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const getAllUsers = createAsyncThunk(
+  "user/getAllUsers",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    const userAuth = getState()?.userAuth;
+    const { userLoggedIn } = userAuth;
+    const config = {
+      headers: { Authorization: `Bearer ${userLoggedIn?.token}` },
+    };
+
+    try {
+      const { data } = await axios.get("http://localhost:5000/users", config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.message);
+    }
+  }
+);
+
 const userStored = localStorage.getItem("userInfos")
   ? JSON.parse(localStorage.getItem("userInfos"))
   : null;
@@ -101,6 +119,21 @@ const userSlice = createSlice({
       state.serverErr = undefined;
     },
     [logout.rejected]: (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    },
+    ////////////////////////////////////////////////////////////////////
+    [getAllUsers.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getAllUsers.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.allUsers = action?.payload;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    },
+    [getAllUsers.rejected]: (state, action) => {
       state.loading = false;
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;
