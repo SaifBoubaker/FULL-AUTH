@@ -29,7 +29,6 @@ export const login = createAsyncThunk(
       localStorage.setItem("userInfos", JSON.stringify(data));
       toast.success("Logged Successfully");
       navigate("/");
-      window.location.reload();
       return data;
     } catch (error) {
       return rejectWithValue(error?.response?.data);
@@ -43,7 +42,6 @@ export const logout = createAsyncThunk(
     try {
       await localStorage.removeItem("userInfos");
       navigate("/user/login");
-      window.location.reload();
     } catch (error) {
       return rejectWithValue(error?.response?.data);
     }
@@ -100,6 +98,7 @@ const userSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.loading = false;
       state.userLogged = action?.payload;
+      window.location.reload();
       state.appErr = undefined;
       state.serverErr = undefined;
     },
@@ -115,6 +114,7 @@ const userSlice = createSlice({
     [logout.fulfilled]: (state, action) => {
       state.loading = false;
       state.userLogged = null;
+      window.location.reload();
       state.appErr = undefined;
       state.serverErr = undefined;
     },
@@ -142,3 +142,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { AuthHandler } = userSlice.actions;

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const UserRouter = require("./Routes/UserRouter");
+const PostRouter = require("./Routes/PostRouter");
 
 mongoose.set("strictQuery", false);
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/users", UserRouter);
+app.use("/post", PostRouter);
 
 mongoose.connect(process.env.DBURL, () => {
   console.log("DB is Connected");
